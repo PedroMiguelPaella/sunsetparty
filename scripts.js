@@ -1,117 +1,107 @@
-// Firebase SDK
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+// scripts.js?v=7
 
-// QRCode sem named export
-import * as QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm";
 
-// EmailJS init (garante que emailjs está disponível)
-import "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
-emailjs.init("QPZDUMl1VEl1wjfe5"); // Public Key
-
-// Firebase config
+// Configuração do Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBHuhcZjt4VXUgJ76kVz7v4S8IXzn8OhS0",
+  apiKey: "AIzaSyCaPfq-9-LJYAZukd4QJfP-0UYxqPEtx-M",
   authDomain: "sunsetpartycft.firebaseapp.com",
   projectId: "sunsetpartycft",
   storageBucket: "sunsetpartycft.appspot.com",
-  messagingSenderId: "1066732865141",
-  appId: "1:1066732865141:web:53375abda2dab5da739a3c",
-  measurementId: "G-M3K30E79TX"
+  messagingSenderId: "521161059267",
+  appId: "1:521161059267:web:5b4f74a6c5a3aebc5b8766",
+  measurementId: "G-SYCSW61R6Z",
 };
 
-// Inicialização Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getFirestore(app);
-
-// Função de envio de e-mail via EmailJS
-window.sendEmail = async function (params) {
-  return emailjs.send("service_ozijssw", "template_wamk2vj", params);
-};
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contactForm");
   const sucesso = document.getElementById("sucesso");
   const erro = document.getElementById("erro");
 
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+  if (form) {
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-    const formData = new FormData(form);
-    const nome = formData.get("nome");
-    const email = formData.get("email");
-    const telefone = formData.get("telefone");
-    const interesse = formData.get("interesse");
-    const agencia = formData.get("agencia");
-    const participantes = formData.get("participantes");
+      const formData = new FormData(form);
+      const nome = formData.get("nome").trim();
+      const email = formData.get("email").trim();
+      const telemovel = formData.get("telemovel").trim();
+      const acompanhantes = parseInt(formData.get("acompanhantes"), 10);
+      const interesse = formData.get("interesse");
+      const agencia = formData.get("agencia") || "";
 
-    try {
-      // Grava no Firestore
-      const docRef = await addDoc(collection(db, "participantes"), {
-        nome,
-        email,
-        telefone,
-        interesse,
-        agencia,
-        participantes,
-        criadoEm: new Date()
-      });
+      if (!nome || !email || !telemovel || !acompanhantes || !interesse) {
+        erro.classList.remove("d-none");
+        return;
+      }
 
-      // URL com ID único
-      const idUnico = docRef.id;
-      const urlComId = `https://teuseventosite.com/confirmacao?id=${idUnico}`;
+      try {
+        const docRef = await addDoc(collection(db, "inscricoes"), {
+          nome,
+          email,
+          telemovel,
+          acompanhantes,
+          interesse,
+          agencia,
+          criadoEm: serverTimestamp(),
+        });
 
-      // Gera QR code
-      QRCode.toDataURL(urlComId, async function (err, base64) {
-        if (err) {
-          console.error("Erro ao gerar QR code:", err);
-          erro.classList.remove("d-none");
-          return;
-        }
+        const id = docRef.id;
+        const confirmUrl = `${window.location.origin}/confirmacao.html?id=${id}`;
+        const qrcode = await QRCode.toDataURL(confirmUrl);
 
-        const params = {
-          to_name: nome,
-          email: email,
-          qrcode: base64
-        };
-
-        // Envia o e-mail
-        await window.sendEmail(params);
+        await fetch("https://us-central1-sunsetpartycft.cloudfunctions.net/sendConfirmationEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: email,
+            nome,
+            qrcode,
+          }),
+        });
 
         form.reset();
         form.style.display = "none";
         sucesso.classList.remove("d-none");
-      });
-    } catch (err) {
-      console.error("Erro geral:", err);
-      erro.classList.remove("d-none");
-    }
-  });
+      } catch (err) {
+        console.error("Erro ao enviar inscrição:", err);
+        erro.classList.remove("d-none");
+      }
+    });
 
-  // Lógica do campo 'agência'
-  const interesseSelect = document.getElementById("interesse");
-  const agenciaWrapper = document.getElementById("agenciaWrapper");
-  const agenciaInput = document.getElementById("agencia");
+    const interesseSelect = document.getElementById("interesse");
+    const agenciaWrapper = document.getElementById("agenciaWrapper");
+    const agenciaInput = document.getElementById("agencia");
 
-  interesseSelect.addEventListener("change", function () {
-    if (this.value === "Profissional da área imobiliária") {
+    interesseSelect.addEventListener("change", function () {
+      if (this.value === "Profissional da área imobiliária") {
+        agenciaWrapper.style.display = "block";
+        agenciaInput.setAttribute("required", "required");
+      } else {
+        agenciaWrapper.style.display = "none";
+        agenciaInput.removeAttribute("required");
+      }
+    });
+
+    // Estado inicial
+    if (interesseSelect.value === "Profissional da área imobiliária") {
       agenciaWrapper.style.display = "block";
       agenciaInput.setAttribute("required", "required");
     } else {
       agenciaWrapper.style.display = "none";
       agenciaInput.removeAttribute("required");
     }
-  });
-
-  // Ajuste inicial
-  if (interesseSelect.value === "Profissional da área imobiliária") {
-    agenciaWrapper.style.display = "block";
-    agenciaInput.setAttribute("required", "required");
-  } else {
-    agenciaWrapper.style.display = "none";
-    agenciaInput.removeAttribute("required");
   }
 });
-
