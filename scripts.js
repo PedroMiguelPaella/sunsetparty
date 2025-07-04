@@ -1,24 +1,27 @@
+// Importações Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
-import QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js";
 
-// 🔹 Firebase Config
+// QRCode (sem usar named export)
+import * as QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js";
+
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBHuhcZjt4VXUgJ76kVz7v4S8IXzn8OhS0",
   authDomain: "sunsetpartycft.firebaseapp.com",
   projectId: "sunsetpartycft",
-  storageBucket: "sunsetpartycft.firebasestorage.app",
+  storageBucket: "sunsetpartycft.appspot.com",
   messagingSenderId: "1066732865141",
   appId: "1:1066732865141:web:53375abda2dab5da739a3c",
   measurementId: "G-M3K30E79TX"
 };
 
+// Inicialização
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
-// 🔹 DOM Ready
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contactForm");
   const sucesso = document.getElementById("sucesso");
@@ -58,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
           qrcode: base64
         };
 
-        await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", params);
+        await window.sendEmail(params);
 
         form.reset();
         form.style.display = "none";
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
       erro.classList.remove("d-none");
     }
   });
-  
+
   const interesseSelect = document.getElementById("interesse");
   const agenciaWrapper = document.getElementById("agenciaWrapper");
   const agenciaInput = document.getElementById("agencia");
@@ -85,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Mostrar/ocultar corretamente se já tiver um valor pré-selecionado
+  // Ajuste inicial se já houver valor selecionado
   if (interesseSelect.value === "Profissional da área imobiliária") {
     agenciaWrapper.style.display = "block";
     agenciaInput.setAttribute("required", "required");
