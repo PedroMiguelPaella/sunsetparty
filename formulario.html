@@ -39,55 +39,40 @@
             <div class="row gx-5 justify-content-center">
               <div class="col-lg-8 col-xl-6">
                 <form id="contactForm">
-                  <div class="form-floating mb-3">
-                    <input class="form-control" id="nome" type="text" placeholder="Pedro Miguel" required />
-                    <label for="nome">Nome</label>
-                  </div>
-                  
-                  <div class="form-floating mb-3">
-                    <input class="form-control" id="email" type="email" placeholder="pedro@hotmail.com" required />
-                    <label for="email">Email</label>
-                  </div>
+  <div class="form-floating mb-3">
+    <input class="form-control" id="nome" name="nome" type="text" placeholder="Pedro Miguel" required />
+    <label for="nome">Nome</label>
+  </div>
+  
+  <div class="form-floating mb-3">
+    <input class="form-control" id="email" name="email" type="email" placeholder="pedro@hotmail.com" required />
+    <label for="email">Email</label>
+  </div>
 
-                  <div class="form-floating mb-3">
-                    <input class="form-control" id="telemovel" type="tel" placeholder="(91)1222333" required />
-                    <label for="telemovel">Telemóvel</label>
-                  </div>
+  <div class="form-floating mb-3">
+    <input class="form-control" id="telemovel" name="telemovel" type="tel" placeholder="(91)1222333" required />
+    <label for="telemovel">Telemóvel</label>
+  </div>
 
-                  <div class="form-floating mb-3">
-                    <input class="form-control" id="acompanhantes" type="number" placeholder="2" required />
-                    <label for="acompanhantes">Número de participantes</label>
-                  </div>
+  <div class="form-floating mb-3">
+    <input class="form-control" id="acompanhantes" name="acompanhantes" type="number" placeholder="2" required />
+    <label for="acompanhantes">Número de participantes</label>
+  </div>
 
-                  <div class="form-floating mb-3">
-                    <select class="form-select" id="interesse" name="interesse" required>
-                      <option value="" selected disabled> </option>
-                      <option value="Comprador(a)">Comprador(a) de imóvel</option>
-                      <option value="Profissional da área imobiliária">Profissional da área imobiliária</option>
-                    </select>
-                    <label for="interesse">Seu interesse é como:</label>
-                  </div>
+  <div class="form-floating mb-3">
+    <select class="form-select" id="interesse" name="interesse" required>
+      <option value="" selected disabled> </option>
+      <option value="Comprador(a)">Comprador(a) de imóvel</option>
+      <option value="Profissional da área imobiliária">Profissional da área imobiliária</option>
+    </select>
+    <label for="interesse">Seu interesse é como:</label>
+  </div>
 
-                  <div class="form-floating mb-3" id="agenciaWrapper" style="display: none;">
-                    <input class="form-control" id="agencia" type="text" placeholder="Nome da agência" />
-                    <label for="agencia">Qual agência?</label>
-                  </div>
+  <div class="form-floating mb-3" id="agenciaWrapper" style="display: none;">
+    <input class="form-control" id="agencia" name="agencia" type="text" placeholder="Nome da agência" />
+    <label for="agencia">Qual agência?</label>
+  </div>
 
-                  <div class="d-none" id="sucesso">
-                    <div class="text-center mb-3">
-                      <div class="fw-bolder">Inscrição confirmada!</div>
-                      Nos vemos no pôr do sol!
-                    </div>
-                  </div>
-
-                  <div class="d-none" id="erro">
-                    <div class="text-center text-danger mb-3">Ocorreu um erro no envio. Verifique os campos e tente novamente.</div>
-                  </div>
-
-                  <div class="d-grid">
-                    <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Enviar</button>
-                  </div>
-                </form>
               </div>
             </div>
           </div>
