@@ -37,16 +37,19 @@
     </main>
     </body>
 <script type="module">
-  import EmailJS from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3.11.0/+esm';
 
-  EmailJS.init('QPZDUMl1VEl1wjfe5'); // Sua chave pública
-
-  window.sendEmail = async (params) => {
+  window.sendEmail = async function (params) {
     try {
-      await EmailJS.send('service_ozijssw', 'template_wamk2vj', params);
-      console.log("Email enviado com sucesso");
+      const result = await emailjs.send("service_ozijssw", "template_wamk2vj", params, {
+        publicKey: "QPZDUMl1VEl1wjfe5"
+      });
+
+      console.log("Email enviado com sucesso:", result);
     } catch (error) {
       console.error("Erro ao enviar o email:", error);
+      const erro = document.getElementById("erro");
+      erro.classList.remove("d-none");
     }
   };
 </script>
