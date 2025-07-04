@@ -1,9 +1,9 @@
-// Importações Firebase
+// Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
 
-// QRCode (sem usar named export)
+// QRCode sem named export
 import * as QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js";
 
 // Firebase config
@@ -17,10 +17,15 @@ const firebaseConfig = {
   measurementId: "G-M3K30E79TX"
 };
 
-// Inicialização
+// Inicialização Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
+
+// Função de envio de e-mail via EmailJS
+window.sendEmail = async function (params) {
+  return emailjs.send("service_ozijssw", "template_wamk2vj", params, "QPZDUMl1VEl1wjfe5");
+};
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contactForm");
@@ -35,45 +40,53 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = formData.get("email");
     const interesse = formData.get("interesse");
     const agencia = formData.get("agencia");
+    const telefone = formData.get("telefone");
+    const participantes = formData.get("participantes");
 
     try {
+      // Grava no Firestore
       const docRef = await addDoc(collection(db, "participantes"), {
         nome,
         email,
+        telefone,
         interesse,
         agencia,
+        participantes,
         criadoEm: new Date()
       });
 
+      // URL com ID único
       const idUnico = docRef.id;
       const urlComId = `https://teuseventosite.com/confirmacao?id=${idUnico}`;
 
+      // Gera QR code
       QRCode.toDataURL(urlComId, async function (err, base64) {
         if (err) {
-          console.error("Erro ao gerar QR:", err);
+          console.error("Erro ao gerar QR code:", err);
+          erro.classList.remove("d-none");
           return;
         }
 
         const params = {
           to_name: nome,
-          email: email,
-          message: `Olá ${nome}, aqui está seu acesso ao evento.`,
-          qrcode: base64
+          qrcode: base64,
+          email: email
         };
 
+        // Envia o e-mail
         await window.sendEmail(params);
 
         form.reset();
         form.style.display = "none";
         sucesso.classList.remove("d-none");
       });
-
     } catch (err) {
       console.error("Erro geral:", err);
       erro.classList.remove("d-none");
     }
   });
 
+  // Lógica do campo 'agência'
   const interesseSelect = document.getElementById("interesse");
   const agenciaWrapper = document.getElementById("agenciaWrapper");
   const agenciaInput = document.getElementById("agencia");
@@ -88,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Ajuste inicial se já houver valor selecionado
+  // Ajuste inicial
   if (interesseSelect.value === "Profissional da área imobiliária") {
     agenciaWrapper.style.display = "block";
     agenciaInput.setAttribute("required", "required");
@@ -97,3 +110,4 @@ document.addEventListener("DOMContentLoaded", function () {
     agenciaInput.removeAttribute("required");
   }
 });
+
