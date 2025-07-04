@@ -4,7 +4,13 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebas
 import QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js";
 
 const firebaseConfig = {
-  // ... sua config Firebase ...
+  apiKey: "AIzaSyBHuhcZjt4VXUgJ76kVz7v4S8IXzn8OhS0",
+  authDomain: "sunsetpartycft.firebaseapp.com",
+  projectId: "sunsetpartycft",
+  storageBucket: "sunsetpartycft.firebasestorage.app",
+  messagingSenderId: "1066732865141",
+  appId: "1:1066732865141:web:53375abda2dab5da739a3c",
+  measurementId: "G-M3K30E79TX"
 };
 
 const app = initializeApp(firebaseConfig);
