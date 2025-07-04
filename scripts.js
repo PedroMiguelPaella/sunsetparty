@@ -3,6 +3,7 @@ import { getFirestore, collection, addDoc } from "https://www.gstatic.com/fireba
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
 import QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js";
 
+// 🔹 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyBHuhcZjt4VXUgJ76kVz7v4S8IXzn8OhS0",
   authDomain: "sunsetpartycft.firebaseapp.com",
@@ -16,23 +17,28 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
-const interesseSelect = document.getElementById("interesse");
-  const agenciaWrapper = document.getElementById("agenciaWrapper");
 
-  interesseSelect.addEventListener("change", function () {
-    if (this.value === "Profissional da área imobiliária") {
-      agenciaWrapper.style.display = "block";
-      document.getElementById("agencia").setAttribute("required", "required");
-    } else {
-      agenciaWrapper.style.display = "none";
-      document.getElementById("agencia").removeAttribute("required");
-    }
-  });
+// 🔹 DOM Ready
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contactForm");
   const sucesso = document.getElementById("sucesso");
   const erro = document.getElementById("erro");
+  const interesseSelect = document.getElementById("interesse");
+  const agenciaWrapper = document.getElementById("agenciaWrapper");
+  const agenciaInput = document.getElementById("agencia");
 
+  // 🔹 Mostrar/ocultar campo "agência"
+  interesseSelect.addEventListener("change", function () {
+    if (this.value === "Profissional da área imobiliária") {
+      agenciaWrapper.style.display = "block";
+      agenciaInput.setAttribute("required", "required");
+    } else {
+      agenciaWrapper.style.display = "none";
+      agenciaInput.removeAttribute("required");
+    }
+  });
+
+  // 🔹 Envio do formulário
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
