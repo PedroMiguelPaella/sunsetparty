@@ -35,11 +35,20 @@
                 </div>
             </div>
     </main>
+    </body>
 <script type="module">
-  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+  import EmailJS from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
 
-  emailjs.init("QPZDUMl1VEl1wjfe5"); // sua PUBLIC KEY
-  window.emailjs = emailjs; // expõe para scripts externos se necessário
+  EmailJS.init('QPZDUMl1VEl1wjfe5'); // Sua chave pública
+
+  window.sendEmail = async (params) => {
+    try {
+      await EmailJS.send('service_ozijssw', 'template_wamk2vj', params);
+      console.log("Email enviado com sucesso");
+    } catch (error) {
+      console.error("Erro ao enviar o email:", error);
+    }
+  };
 </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script type="module" src="scripts.js?v=3"></script>
