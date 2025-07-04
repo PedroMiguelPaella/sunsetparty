@@ -16,7 +16,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
+const interesseSelect = document.getElementById("interesse");
+  const agenciaWrapper = document.getElementById("agenciaWrapper");
 
+  interesseSelect.addEventListener("change", function () {
+    if (this.value === "Profissional da área imobiliária") {
+      agenciaWrapper.style.display = "block";
+      document.getElementById("agencia").setAttribute("required", "required");
+    } else {
+      agenciaWrapper.style.display = "none";
+      document.getElementById("agencia").removeAttribute("required");
+    }
+  });
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contactForm");
   const sucesso = document.getElementById("sucesso");
