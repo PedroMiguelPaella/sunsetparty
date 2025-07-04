@@ -23,22 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contactForm");
   const sucesso = document.getElementById("sucesso");
   const erro = document.getElementById("erro");
-  const interesseSelect = document.getElementById("interesse");
-  const agenciaWrapper = document.getElementById("agenciaWrapper");
-  const agenciaInput = document.getElementById("agencia");
 
-  // 🔹 Mostrar/ocultar campo "agência"
-  interesseSelect.addEventListener("change", function () {
-    if (this.value === "Profissional da área imobiliária") {
-      agenciaWrapper.style.display = "block";
-      agenciaInput.setAttribute("required", "required");
-    } else {
-      agenciaWrapper.style.display = "none";
-      agenciaInput.removeAttribute("required");
-    }
-  });
-
-  // 🔹 Envio do formulário
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -60,14 +45,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const idUnico = docRef.id;
       const urlComId = `https://teuseventosite.com/confirmacao?id=${idUnico}`;
 
-      // 🔹 Gera QR como imagem base64
       QRCode.toDataURL(urlComId, async function (err, base64) {
         if (err) {
           console.error("Erro ao gerar QR:", err);
           return;
         }
 
-        // 🔹 Enviar e-mail via EmailJS
         const params = {
           to_name: nome,
           email: email,
@@ -87,4 +70,27 @@ document.addEventListener("DOMContentLoaded", function () {
       erro.classList.remove("d-none");
     }
   });
+  
+  const interesseSelect = document.getElementById("interesse");
+  const agenciaWrapper = document.getElementById("agenciaWrapper");
+  const agenciaInput = document.getElementById("agencia");
+
+  interesseSelect.addEventListener("change", function () {
+    if (this.value === "Profissional da área imobiliária") {
+      agenciaWrapper.style.display = "block";
+      agenciaInput.setAttribute("required", "required");
+    } else {
+      agenciaWrapper.style.display = "none";
+      agenciaInput.removeAttribute("required");
+    }
+  });
+
+  // Mostrar/ocultar corretamente se já tiver um valor pré-selecionado
+  if (interesseSelect.value === "Profissional da área imobiliária") {
+    agenciaWrapper.style.display = "block";
+    agenciaInput.setAttribute("required", "required");
+  } else {
+    agenciaWrapper.style.display = "none";
+    agenciaInput.removeAttribute("required");
+  }
 });
