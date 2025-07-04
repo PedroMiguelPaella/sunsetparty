@@ -6,6 +6,10 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebas
 // QRCode sem named export
 import * as QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js";
 
+// EmailJS init (garante que emailjs está disponível)
+import "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
+emailjs.init("QPZDUMl1VEl1wjfe5"); // Public Key
+
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBHuhcZjt4VXUgJ76kVz7v4S8IXzn8OhS0",
@@ -24,7 +28,7 @@ const db = getFirestore(app);
 
 // Função de envio de e-mail via EmailJS
 window.sendEmail = async function (params) {
-  return emailjs.send("service_ozijssw", "template_wamk2vj", params, "QPZDUMl1VEl1wjfe5");
+  return emailjs.send("service_ozijssw", "template_wamk2vj", params);
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -38,9 +42,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const formData = new FormData(form);
     const nome = formData.get("nome");
     const email = formData.get("email");
+    const telefone = formData.get("telefone");
     const interesse = formData.get("interesse");
     const agencia = formData.get("agencia");
-    const telefone = formData.get("telefone");
     const participantes = formData.get("participantes");
 
     try {
@@ -69,8 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const params = {
           to_name: nome,
-          qrcode: base64,
-          email: email
+          email: email,
+          qrcode: base64
         };
 
         // Envia o e-mail
