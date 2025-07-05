@@ -4,7 +4,7 @@ import QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm";
 
 // URL do teu Web App (Apps Script)
 const WEBAPP_URL =
-  "https://script.google.com/macros/s/AKfycbzuuOQYnkjdCqDd3L8SEDa5GBFb-1kV3NwSkGgg5qDEGK1J2eU2jFfkEDtYIoxJCAuQ/exec";
+  "https://script.google.com/macros/s/AKfycbzv6kQRNBI_m6csNCD1Ett0j8lqrgBonvVqYSvdUFsRhm3OAlLz30K3xTs592uonfE/exec";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
