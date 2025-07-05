@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nome = formData.get("nome")?.trim();
     const email = formData.get("email")?.trim();
     const telemovel = formData.get("telemovel")?.trim();
-    const acompanhantes = formData.get("acompanhantes")?.trim();
+    const acompanhantes = parseInt(formData.get("acompanhantes"), 10);
     const interesse = formData.get("interesse");
     const agencia = formData.get("agencia")?.trim() || "";
 
