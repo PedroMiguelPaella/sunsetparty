@@ -1,4 +1,4 @@
-// scripts.js?v=8  ── envio para Google Sheets via Apps Script
+// scripts.js?v=9  ── envio para Google Sheets via Apps Script
 
 import QRCode from "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm";
 
